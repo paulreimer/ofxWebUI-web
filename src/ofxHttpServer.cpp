@@ -21,7 +21,7 @@ ofxHttpServer::setup()
   _http_server.addUrl("/favicon.ico","web/favicon.ico", "image/x-icon");
   _http_server.addUrl("/index.html", "web/index.html");
   _http_server.addUrl("/",           "web/index.html");
-  _http_server.addUrl("/ui.manifest","web/ui.manifest", "text/cache-manifest");
+  _http_server.addUrl("/cache.manifest","web/cache.manifest", "text/cache-manifest");
   _http_server.addUrl("/protobuf.js","web/protobuf.js", "application/javascript");
   _http_server.addUrl("/protobuf-form.js","web/protobuf-form.js", "application/javascript");
   _http_server.addUrl("/ui.proto.js","web/ui.proto.js", "application/javascript");
