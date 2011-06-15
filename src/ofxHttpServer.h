@@ -35,7 +35,7 @@ protected:
   std::string defaultMimetype;
 };
 
-static ofxHttpServer http_server;
+static ofxHttpServer _http_server;
 
 extern "C" {
 int

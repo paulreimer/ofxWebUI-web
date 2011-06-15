@@ -36,11 +36,14 @@ public:
   std::map<std::string, bool> allowRules;
 
   void _onopen   (libwebsocket* const ws,
-                 session_t* const session,
-                 const char* const _message) const;
+                  session_t* const session,
+                  const char* const _message) const;
+  void _onclose  (libwebsocket* const ws,
+                  session_t* const session,
+                  const char* const _message) const;
   void _onmessage(libwebsocket* const ws,
-                 session_t* const session,
-                 const char* const _message) const;
+                  session_t* const session,
+                  const char* const _message) const;
 
   void broadcast(const std::string& message,
                  const bool needsEncoding = true);
@@ -99,7 +102,7 @@ private:
   const libwebsocket* skip_ws;
 };
 
-static ofxWebSocketServer websocket_server;
+static ofxWebSocketServer _websocket_server;
 
 extern "C"
 int

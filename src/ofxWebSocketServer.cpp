@@ -132,6 +132,22 @@ ofxWebSocketServer::_onopen(libwebsocket* const ws,
 
 //--------------------------------------------------------------
 void
+ofxWebSocketServer::_onclose(libwebsocket* const ws,
+                             session_t* const session,
+                             const char* const _message) const
+{
+  std::string message = (_message == NULL)? "" : _message;
+  
+  WebSocketEventArgs args;
+  args.ws = ws;
+  args.session = session;
+  args.message = message;
+  
+  ofNotifyEvent(onclose, args);
+}
+
+//--------------------------------------------------------------
+void
 ofxWebSocketServer::_onmessage(libwebsocket* const ws,
                               session_t* const session,
                               const char* const _message) const
@@ -322,7 +338,11 @@ callback_ofx(struct libwebsocket_context* context,
 	switch (reason)
   {
     case LWS_CALLBACK_ESTABLISHED:
-      websocket_server._onopen(ws, session, message);
+      _websocket_server._onopen(ws, session, message);
+      break;
+
+    case LWS_CALLBACK_CLOSED:
+      _websocket_server._onclose(ws, session, message);
       break;
 
     case LWS_CALLBACK_BROADCAST:
@@ -336,23 +356,23 @@ callback_ofx(struct libwebsocket_context* context,
           || memcmp(session->lastBroadcast, message,
                     MIN(len, session->lastBroadcastLength)))
       */
-        websocket_server.send(ws, message, len, false);
+        _websocket_server.send(ws, message, len, false);
       break;
 
     case LWS_CALLBACK_SERVER_WRITEABLE:
       printf("Server writable\n");
-      //websocket_server.send(ws, message);
+      //_websocket_server.send(ws, message);
       break;
 
     case LWS_CALLBACK_RECEIVE:
-      websocket_server._onmessage(ws, session, message);
+      _websocket_server._onmessage(ws, session, message);
       break;
       
     case LWS_CALLBACK_FILTER_PROTOCOL_CONNECTION:
       libwebsockets_get_peer_addresses((int)(long)user,
                                        client_name, sizeof(client_name),
                                        client_ip, sizeof(client_ip));
-      return websocket_server.allowClient(client_name, client_ip)? 0 : 1;
+      return _websocket_server.allowClient(client_name, client_ip)? 0 : 1;
       break;
       
     default:

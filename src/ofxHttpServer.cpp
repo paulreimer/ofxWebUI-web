@@ -18,13 +18,13 @@ ofxHttpServer::~ofxHttpServer()
 void
 ofxHttpServer::setup()
 {
-  http_server.addUrl("/favicon.ico","web/favicon.ico", "image/x-icon");
-  http_server.addUrl("/index.html", "web/index.html");
-  http_server.addUrl("/",           "web/index.html");
-  http_server.addUrl("/ui.manifest","web/ui.manifest", "text/cache-manifest");
-  http_server.addUrl("/protobuf.js","web/protobuf.js", "application/javascript");
-  http_server.addUrl("/protobuf-form.js","web/protobuf-form.js", "application/javascript");
-  http_server.addUrl("/ui.proto.js","web/ui.proto.js", "application/javascript");
+  _http_server.addUrl("/favicon.ico","web/favicon.ico", "image/x-icon");
+  _http_server.addUrl("/index.html", "web/index.html");
+  _http_server.addUrl("/",           "web/index.html");
+  _http_server.addUrl("/ui.manifest","web/ui.manifest", "text/cache-manifest");
+  _http_server.addUrl("/protobuf.js","web/protobuf.js", "application/javascript");
+  _http_server.addUrl("/protobuf-form.js","web/protobuf-form.js", "application/javascript");
+  _http_server.addUrl("/ui.proto.js","web/ui.proto.js", "application/javascript");
 }
 
 //--------------------------------------------------------------
@@ -121,11 +121,11 @@ callback_http(struct libwebsocket_context* context,
 	switch (reason)
   {
     case LWS_CALLBACK_HTTP:
-      fprintf(stderr, "serving HTTP URL %s with file:%s\n", url, http_server.filenameForUrl(url));
+      fprintf(stderr, "serving HTTP URL %s with file:%s\n", url, _http_server.filenameForUrl(url));
       
       if (libwebsockets_serve_http_file(wsi,
-                                        http_server.filenameForUrl(url),
-                                        http_server.mimetypeForUrl(url)))
+                                        _http_server.filenameForUrl(url),
+                                        _http_server.mimetypeForUrl(url)))
         fprintf(stderr, "Failed to send HTTP file\n");
       
       break;
@@ -135,7 +135,7 @@ callback_http(struct libwebsocket_context* context,
                                        client_name, sizeof(client_name),
                                        client_ip, sizeof(client_ip));
       
-      return http_server.allowClient(client_name, client_ip)? 0 : 1;
+      return _http_server.allowClient(client_name, client_ip)? 0 : 1;
 
       break;
       
