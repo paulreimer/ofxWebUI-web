@@ -1,0 +1,126 @@
+<!DOCTYPE html> 
+<html lang="en" manifest="/cache.manifest">
+  <head> 
+  <meta charset="utf-8"> 
+  <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta names="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>ofxWebUI</title> 
+
+  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.css" />
+</head> 
+<body> 
+<div data-role="page"> 
+ 
+  <div data-role="header" data-theme="b"> 
+    <a href="#" data-icon="refresh" id="ws_url">Connect</a> 
+    <h1 id="ws_status">Not initialized</h1> 
+    <a href="#" data-icon="gear">Options</a>
+  </div>
+ 
+  <div data-role="content" id="form"> 
+  </div>
+</div>
+
+
+<script src="http://code.jquery.com/jquery-1.5.2.min.js"></script>
+
+<script src="/protobuf.js"></script>
+<script src="/ui.proto.js"></script>
+<script src="/protobuf-form.js"></script>
+
+<script src="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.js"></script>
+
+<script type="text/javascript">
+var ws;
+var live = false;
+
+function get_appropriate_ws_url()
+{
+	var pcol;
+	var u = document.URL;
+
+	/*
+	 * We open the websocket encrypted if this page came on an
+	 * https:// url itself, otherwise unencrypted
+	 */
+
+	if (u.substring(0, 5) == "https") {
+		pcol = "wss://";
+		u = u.substr(8);
+	} else {
+		pcol = "ws://";
+		if (u.substring(0, 4) == "http")
+			u = u.substr(7);
+	}
+
+	u = u.split('/');
+
+	return pcol + u[0];
+}
+
+$(document).ready(function() {
+  var ws_url = get_appropriate_ws_url();
+
+  ws = new WebSocket(ws_url, "ofx");
+  var ws_url_el = $("#ws_url");
+
+  try {
+    ws.onopen = function() {
+      ws_url_el.attr('data-theme', 'd');
+      $('.ui-icon', ws_url_el)
+        .addClass('ui-icon-check')
+        .removeClass('ui-icon-refresh')
+      $('.ui-btn-text', ws_url_el).text(ws_url);
+      $('#ws_status').text('Connected');
+    }
+
+    ws.onmessage = function got_packet(msg) {
+      var ui = new protobuf.ui;
+      var serialized = new PROTO.Base64Stream(msg.data);
+      ui.ParseFromStream(serialized);
+
+      live = false;
+      for (var field in ui.values_)
+      {
+        var el = $('#'+field);
+        var options = ui.properties_[field].options;
+        switch (options.widget)
+        {
+          case 'slider':
+            el.val(ui.values_[field]).slider("refresh");
+            break;
+          case 'toggle':
+            el[0].selectedIndex = ui.values_[field]? 1:0;
+            el.slider("refresh");
+            break;
+          case 'radio':
+            var radios = $('input[type="radio"]', el);
+            radios.attr('checked', false);
+
+            var name = [field, ui.values_[field]].join('_');
+            $('input[type="radio"]#'+name).attr('checked', true);
+
+            radios.checkboxradio('refresh');
+            break;
+        }
+      }
+      live = true;
+    } 
+
+    ws.onclose = function(){
+      ws_url_el.attr('data-theme', 'b')
+      $('.ui-icon', ws_url_el)
+        .addClass('ui-icon-refresh')
+        .removeClass('ui-icon-check')
+      $('.ui-btn-text', ws_url_el).text("Reconnect");
+      $('#ws_status').text('Disconnected');
+    }
+  } catch(exception) {
+    alert('<p>Error' + exception);  
+  }
+});
+</script>
+</body>
+</html>
+

@@ -1,0 +1,23 @@
+CACHE MANIFEST
+
+/index.html
+
+# css
+http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.css
+
+# js
+http://code.jquery.com/jquery-1.5.2.min.js
+http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.js
+/protobuf.js
+/protobuf-form.js
+
+
+# img
+http://code.jquery.com/mobile/1.0a4.1/images/ajax-loader.png
+http://code.jquery.com/mobile/1.0a4.1/images/icons-18-white.png
+
+FALLBACK:
+#/ /admin/offline
+
+NETWORK:
+*
