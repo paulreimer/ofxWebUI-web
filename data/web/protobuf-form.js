@@ -59,12 +59,13 @@ $(document).bind("mobileinit", function(){
       $(el).change({
         'field': field,
         'widget': options.widget
-        }, function(evt) {
-        if (!live)
+      }, function(evt) {
+        if (!live || !ws)
           return;
 
         var ui = new protobuf.ui;
-        var serialized = new PROTO.Base64Stream;
+        var serialized = ws.binaryType? new PROTO.ByteArrayStream
+          : new PROTO.Base64Stream;
         var value = null;
 
         switch (evt.data['widget'])
@@ -91,8 +92,9 @@ $(document).bind("mobileinit", function(){
         ui[evt.data['field']] = value;
         ui.SerializeToStream(serialized);
 
-        if (ws)
-          ws.send(serialized.getString());
+        console.log("send:")
+        console.log(serialized);
+        ws.send(serialized.getString());
       });
       form.append(el);
     }
