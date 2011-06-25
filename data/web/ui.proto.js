@@ -14,7 +14,7 @@ protobuf.ui = PROTO.Message("protobuf.ui",{
 		id: 2
 	},
 	decay_halflife: {
-    options: {widget: 'slider', min: 0.001, max: 2.0},
+    options: {widget: 'slider', min: 0.001, max: 2.0, step: 0.01},
 		multiplicity: PROTO.optional,
 		type: function(){return PROTO.Double;},
 		id: 3
@@ -32,7 +32,7 @@ protobuf.ui = PROTO.Message("protobuf.ui",{
 		id: 5
 	},
 	blur_amt: {
-    options: {widget: 'slider', min: 0.0, max: 20.0},
+    options: {widget: 'slider', min: 0.0, max: 20.0, step: 0.5},
 		multiplicity: PROTO.optional,
 		type: function(){return PROTO.Float;},
 		id: 6

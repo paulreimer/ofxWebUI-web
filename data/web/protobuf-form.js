@@ -8,12 +8,17 @@ $(document).bind("mobileinit", function(){
     switch (options.widget)
     {
       case 'slider':
+        var step = options['step'] || "1";
         input.push(
           '<div data-role="fieldcontain">',
             '<label for="', field, '">', field, ':</label>',
             '<input type="range" ',
-              'name="', field, '" id="', field, '" ',
-              'value="0" min="', options['min'], '" max="', options['max'], '"  />',
+              'name="', field, '" ',
+              'id="', field, '" ',
+              'step="', step, '" ',
+              'value="0" ',
+              'min="', options['min'], '" ',
+              'max="', options['max'], '"  />',
           '</div>'
         );
         break;
@@ -45,7 +50,8 @@ $(document).bind("mobileinit", function(){
           '<div data-role="fieldcontain">',
             '<label for="', field, '">', field, '</label>',
             '<select data-role="slider" ',
-              'name="', field, '" id="', field, '">',
+              'name="', field, '" ',
+              'id="', field, '">',
               '<option value="0">Off</option>',
               '<option value="1">On</option>',
             '</select>',
@@ -85,16 +91,15 @@ $(document).bind("mobileinit", function(){
             break;
 
           case 'toggle':
-            value = $('select', this)[0].selectedIndex;
+            value = ( $('select', this)[0].selectedIndex > 0 );
             break;
         }
 
         ui[evt.data['field']] = value;
         ui.SerializeToStream(serialized);
 
-        console.log("send:")
-        console.log(serialized);
         ws.send(serialized.getString());
+        console.log('send '+serialized.getString().length+": "+serialized.getString());
       });
       form.append(el);
     }
