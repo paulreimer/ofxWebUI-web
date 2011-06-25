@@ -19,7 +19,7 @@ protected:
   char const* filenameForUrl(const std::string url);
   char const* mimetypeForUrl(const std::string url);  
 
-  void httprequest(ofxWebSocketEventArgs& args);
+  void httprequest(ofxWebSocketEvent& args);
 
   std::map<std::string, std::pair<std::string, std::string> > urls;
   

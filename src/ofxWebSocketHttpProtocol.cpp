@@ -54,8 +54,6 @@ ofxWebSocketHttpProtocol::filenameForUrl(const std::string url)
 {
   std::map<std::string, std::pair<std::string, std::string> >::iterator filename_iter;
   
-  std::cout << urls.size() << std::endl;
-  
   filename_iter = urls.find(url);
   if (filename_iter != urls.end())
     return filename_iter->second.first.c_str();
@@ -78,9 +76,9 @@ ofxWebSocketHttpProtocol::mimetypeForUrl(const std::string url)
 
 //--------------------------------------------------------------
 void
-ofxWebSocketHttpProtocol::httprequest(ofxWebSocketEventArgs& args)
+ofxWebSocketHttpProtocol::httprequest(ofxWebSocketEvent& args)
 {
-  if (libwebsockets_serve_http_file(args.ws,
+  if (libwebsockets_serve_http_file(args.conn.ws,
                                     filenameForUrl(args.message),
                                     mimetypeForUrl(args.message)))
   {
