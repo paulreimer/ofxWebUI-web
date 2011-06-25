@@ -15,7 +15,7 @@
  
   <div data-role="header" data-theme="b"> 
     <a href="#" data-icon="refresh" id="ws_url">Connect</a> 
-    <h1 id="ws_status">Not initialized</h1> 
+    <h1 id="ws_status">ofxWebUI | Not initialized</h1> 
     <a href="#" data-icon="gear">Options</a>
   </div>
  
@@ -68,6 +68,10 @@ function get_appropriate_ws_url()
 
 $(document).ready(function() {
   var ws_url_el = $("#ws_url");
+  var title_base = null;
+  var title_sep = ' | ';
+  if (document.title.indexOf(title_sep)>=0)
+    title_base = document.title.split(title_sep)[0]
 
   var disconnect = function() {
     try {
@@ -101,6 +105,7 @@ $(document).ready(function() {
           .removeClass('ui-icon-refresh')
         $('.ui-btn-text', ws_url_el).text(ws_url);
         $('#ws_status').text('Connected');
+        document.title = title_base + title_sep + 'Connected';
       }
 
       ws.onmessage = function(msg) {
@@ -110,6 +115,7 @@ $(document).ready(function() {
           new PROTO.Base64Stream(msg.data);
 
         ui.ParseFromStream(serialized);
+        console.log("recv "+msg.data.length+": "+msg.data);
 
         live = false;
         for (var field in ui.values_)
@@ -148,6 +154,7 @@ $(document).ready(function() {
           .removeClass('ui-icon-check')
         $('.ui-btn-text', ws_url_el).text("Reconnect");
         $('#ws_status').text('Disconnected');
+        document.title = title_base + title_sep + 'Disconnected';
       }
     } catch(exception) {
       console.log('Error' + exception);  
