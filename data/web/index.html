@@ -115,7 +115,6 @@ $(document).ready(function() {
           new PROTO.Base64Stream(msg.data);
 
         ui.ParseFromStream(serialized);
-        console.log("recv "+msg.data.length+": "+msg.data);
 
         live = false;
         for (var field in ui.values_)

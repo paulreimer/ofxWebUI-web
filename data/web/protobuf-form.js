@@ -99,7 +99,6 @@ $(document).bind("mobileinit", function(){
         ui.SerializeToStream(serialized);
 
         ws.send(serialized.getString());
-        console.log('send '+serialized.getString().length+": "+serialized.getString());
       });
       form.append(el);
     }
