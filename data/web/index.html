@@ -1,21 +1,24 @@
-<!DOCTYPE html> 
-<!--<html lang="en" manifest="/cache.manifest">-->
-<html lang="en">
-  <head> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" manifest="/cache.manifest">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <meta charset="utf-8"> 
   <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta names="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <title>ofxWebUI</title> 
+  <title>WebUI</title>
 
   <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css" />
+
+  <!--[if IE]><script type="text/javascript" src="http://explorercanvas.googlecode.com/svn/tags/m3/excanvas.compiled.js"></script><![endif]-->
 </head> 
 <body> 
 <div data-role="page"> 
  
   <div data-role="header" data-theme="b"> 
     <a href="#" data-icon="refresh" id="ws_url">Connect</a> 
-    <h1 id="ws_status">ofxWebUI | Not initialized</h1> 
+    <h1 id="ws_status">WebUI | Not initialized</h1> 
     <a href="#" data-icon="gear">Options</a>
   </div>
  
@@ -23,147 +26,28 @@
   </div>
 </div>
 
-<script type="text/javascript" src="swfobject.js"></script>
-<script type="text/javascript" src="web_socket.js"></script>
+<script type="text/javascript" charset="utf-8" type="text/javascript" src="swfobject.js"></script>
+<script type="text/javascript" charset="utf-8" type="text/javascript" src="web_socket.js"></script>
 
-<script type="text/javascript">
+<script type="text/javascript" charset="utf-8">
+window.scrollTo(0, 1);
+
 WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
 
 var ws;
 var live = false;
 </script>
 
-<script src="http://code.jquery.com/jquery-1.5.2.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="/farbtastic.js"></script>
 
-<script src="/protobuf.js"></script>
-<script src="/ui.proto.js"></script>
-<script src="/protobuf-form.js"></script>
+<script type="text/javascript" charset="utf-8" src="/protobuf.js"></script>
+<script type="text/javascript" charset="utf-8" src="/ui.proto.js"></script>
 
-<script src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="/protobuf-form.js"></script>
+<script type="text/javascript" charset="utf-8" src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
 
-<script type="text/javascript">
-function get_appropriate_ws_url()
-{
-	var pcol;
-	var u = document.URL;
-
-	/*
-	 * We open the websocket encrypted if this page came on an
-	 * https:// url itself, otherwise unencrypted
-	 */
-
-	if (u.substring(0, 5) == "https") {
-		pcol = "wss://";
-		u = u.substr(8);
-	} else {
-		pcol = "ws://";
-		if (u.substring(0, 4) == "http")
-			u = u.substr(7);
-	}
-
-	u = u.split('/');
-
-	return pcol + u[0];
-}
-
-$(document).ready(function() {
-  var ws_url_el = $("#ws_url");
-  var title_base = null;
-  var title_sep = ' | ';
-  if (document.title.indexOf(title_sep)>=0)
-    title_base = document.title.split(title_sep)[0]
-
-  var disconnect = function() {
-    try {
-      if (ws.readyState !== ws.CLOSING && ws.readyState !== ws.CLOSED)
-      {
-        ws.close(0);
-      }
-    } catch(exception) {
-      console.log('Error' + exception);  
-    }
-  };
-  var connect = function() {
-    var ws_url = get_appropriate_ws_url();
-    try {
-      if (window.MozWebSocket)
-        ws = new MozWebSocket(ws_url, "ofx");
-      else if (window.WebSocket)
-        ws = new WebSocket(ws_url, "ofx");
-      else
-        return;
-
-      if (ws.binaryType)
-        ws.binaryType = 'arraybuffer';
-
-      ws.onopen = function() {
-        ws_url_el
-          .attr('data-theme', 'd')
-          .click(disconnect);
-        $('.ui-icon', ws_url_el)
-          .addClass('ui-icon-check')
-          .removeClass('ui-icon-refresh')
-        $('.ui-btn-text', ws_url_el).text(ws_url);
-        $('#ws_status').text('Connected');
-        document.title = title_base + title_sep + 'Connected';
-      }
-
-      ws.onmessage = function(msg) {
-        var ui = new protobuf.ui;
-        var serialized = ws.binaryType?
-          new PROTO.ByteArrayStream(msg.data) :
-          new PROTO.Base64Stream(msg.data);
-
-        ui.ParseFromStream(serialized);
-
-        live = false;
-        for (var field in ui.values_)
-        {
-          var el = $('#'+field);
-          var options = ui.properties_[field].options;
-          switch (options.widget)
-          {
-            case 'slider':
-              el.val(ui.values_[field]).slider("refresh");
-              break;
-            case 'toggle':
-              el[0].selectedIndex = ui.values_[field]? 1:0;
-              el.slider("refresh");
-              break;
-            case 'radio':
-              var radios = $('input[type="radio"]', el);
-              radios.attr('checked', false);
-
-              var name = [field, ui.values_[field]].join('_');
-              $('input[type="radio"]#'+name).attr('checked', true);
-
-              radios.checkboxradio('refresh');
-              break;
-          }
-        }
-        live = true;
-      } 
-
-      ws.onclose = function(){
-        ws_url_el
-          .attr('data-theme', 'b')
-          .click(connect);
-        $('.ui-icon', ws_url_el)
-          .addClass('ui-icon-refresh')
-          .removeClass('ui-icon-check')
-        $('.ui-btn-text', ws_url_el).text("Reconnect");
-        $('#ws_status').text('Disconnected');
-        document.title = title_base + title_sep + 'Disconnected';
-      }
-    } catch(exception) {
-      console.log('Error' + exception);  
-    }
-  };
-
-  connect();
-  ws_url_el.click(connect);
-});
-</script>
+<script type="text/javascript" charset="utf-8" src="/protobuf-init.js"></script>
 </body>
 </html>
 
