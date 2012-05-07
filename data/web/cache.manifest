@@ -1,6 +1,6 @@
 CACHE MANIFEST
 
-#v1
+#v2
 
 /
 
@@ -10,12 +10,18 @@ http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css
 # js
 http://code.jquery.com/jquery-1.7.1.min.js
 http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js
+
+/farbtastic.min.js
+/doT.min.js
+
 /swfobject.js
-/web_socket.js
+/web_socket.min.js
 /protobuf.js
+
 /protobuf-form.js
+/protobuf-init.js
+
 /ui.proto.js
-/farbtastic.js
 
 # swf
 /WebSocketMain.swf
