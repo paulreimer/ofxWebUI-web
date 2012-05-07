@@ -1,6 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" manifest="/cache.manifest">
+  <!-- <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" manifest="/cache.manifest"> -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <meta charset="utf-8">
@@ -13,6 +14,87 @@
 
   <!--[if IE]><script type="text/javascript" src="http://explorercanvas.googlecode.com/svn/tags/m3/excanvas.compiled.js"></script><![endif]-->
 
+  <script id="string-field-template" class="field-template" type="text/x-dot-template">
+    <div data-role="fieldcontain">
+      <label for="{{= it.name }}">{{= it.name }}:</label>
+      <input
+        type="text"
+        name="{{= it.name }}"
+        id="{{= it.name }}"
+        value="" />
+    </div>
+  </script>
+
+  <script id="slider-field-template" class="field-template" type="text/x-dot-template">
+    <div data-role="fieldcontain">
+      <label for="{{= it.name }}">{{= it.name }}:</label>
+      <input
+        type="range"
+        name="{{= it.name }}"
+        id="{{= it.name }}"
+        step="{{= it.options.step }}"
+        value="0"
+        min="{{= it.options.min }}"
+        max="{{= it.options.max }}" />
+    </div>
+  </script>
+
+  <script id="radio-field-template" class="field-template" type="text/x-dot-template">
+    <div data-role="fieldcontain">
+      <fieldset data-role="controlgroup" id="{{= name }}">
+        <legend>{{= name }}</legend>
+        {{~it.options.choices :choice:idx}}
+          <input
+            type="radio"
+            name="{{= name }}_{{= idx }}" id="{{= name }}_{{= idx }}"
+            value="{{= idx }}" />
+          <label for="{{= name }}_{{= idx }}">{{= choice }}</label>
+        {{~}}
+      </fieldset>
+    </div>
+  </script>
+
+  <script id="imagelist-field-template" class="field-template" type="text/x-dot-template">
+    <div data-role="fieldcontain">
+      <fieldset data-role="controlgroup" id="{{= name }}">
+        <legend>{{= name }}</legend>
+        <ul data-role="listview">
+        {{~it.options.choices :item:idx}}
+          <li><a href="#">
+            <img src="{{= item.image }}" />
+            <h3>{{= item.title }}</h3>
+            <p>{{= item.title }}</p>
+          </a></li>
+        {{~}}
+      </ul>
+      </fieldset>
+    </div>
+  </script>
+
+  <script id="toggle-field-template" class="field-template" type="text/x-dot-template">
+    <div data-role="fieldcontain">
+      <label for="{{= it.name }}">{{= it.name }}</label>
+      <select
+        data-role="slider"
+        name="{{= it.name }}"
+        id="{{= it.name }}">
+        <option value="0">Off</option>
+        <option value="1">On</option>
+      </select>
+    </div>
+  </script>
+
+  <script id="color-field-template" class="field-template" type="text/x-dot-template">
+    <div data-role="fieldcontain">
+      <label for="{{= it.name }}">{{= it.name }}</label>
+      <input
+        type="text"
+        name="{{= it.name }}"
+        id="{{= it.name }}"
+        value="#000000" />
+      <div class="colorpicker"></div>
+    </div>
+  </script>
 </head>
 <body>
 <div data-role="page">
@@ -46,6 +128,7 @@ var live = false;
 <script type="text/javascript" charset="utf-8" src="/protobuf.js"></script>
 <script type="text/javascript" charset="utf-8" src="/ui.proto.js"></script>
 
+<script type="text/javascript" charset="utf-8" src="/protobuf-sync.js"></script>
 <script type="text/javascript" charset="utf-8" src="/protobuf-form.js"></script>
 <script type="text/javascript" charset="utf-8" src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
 
