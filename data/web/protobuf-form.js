@@ -1,5 +1,5 @@
-$(document).bind("mobileinit", function() {
-  var form = $('#form');
+jQuery(document).bind("mobileinit", function() {
+  var form = jQuery('#form');
   var ui = new protobuf.ui;
   for (var field in ui.properties_)
   {
@@ -114,8 +114,8 @@ $(document).bind("mobileinit", function() {
     }
     if (input.length)
     {
-      var el = $(input.join(''));
-      $(el).change({
+      var el = jQuery(input.join(''));
+      jQuery(el).change({
         'field': field,
         'widget': options.widget
       }, function(evt) {
@@ -131,13 +131,13 @@ $(document).bind("mobileinit", function() {
         switch (evt.data['widget'])
         {
           case 'color':
-            value = parseInt($('input', this).val().replace('#', '0x'));
+            value = parseInt(jQuery('input', this).val().replace('#', '0x'));
             break;
 
           case 'radio':
-            $('input[type="radio"]', this).each(function(idx, radio) {
-              var checked = ($(this).attr('id') === evt.target.id);
-              $(this)
+            jQuery('input[type="radio"]', this).each(function(idx, radio) {
+              var checked = (jQuery(this).attr('id') === evt.target.id);
+              jQuery(this)
                 .attr('checked', checked)
                 .checkboxradio('refresh');
               if (checked)
@@ -146,12 +146,12 @@ $(document).bind("mobileinit", function() {
             break;
 
           case 'toggle':
-            value = ( $('select', this)[0].selectedIndex > 0 );
+            value = ( jQuery('select', this)[0].selectedIndex > 0 );
             break;
 
           case 'string':
           case 'slider':
-            value = $('input', this).val();
+            value = jQuery('input', this).val();
             break;
 
           default:
@@ -165,7 +165,7 @@ $(document).bind("mobileinit", function() {
         ws.send(serialized.getString());
       });
 
-      $('li', el).click({
+      jQuery('li', el).click({
         'field': field,
         'widget': options.widget
       }, function(evt) {
@@ -181,7 +181,7 @@ $(document).bind("mobileinit", function() {
         switch (evt.data['widget'])
         {
           case 'image-list':
-            value = $(this).index();
+            value = jQuery(this).index();
             break;
         }
 
@@ -194,9 +194,9 @@ $(document).bind("mobileinit", function() {
     }
   }
 
-  $('.colorpicker').each(function() {
-    $(this).farbtastic({
-      callback: $(this).prev('input'),
+  jQuery('.colorpicker').each(function() {
+    jQuery(this).farbtastic({
+      callback: jQuery(this).prev('input'),
       width: 200
     });
   });

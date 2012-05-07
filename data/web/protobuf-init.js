@@ -32,8 +32,8 @@ function get_appropriate_ws_url(port)
 	return pcol + url;
 }
 
-$(document).ready(function() {
-  var ws_url_el = $("#ws_url");
+jQuery(document).ready(function() {
+  var ws_url_el = jQuery("#ws_url");
   var title_sep = ' | ';
   /*
   var title_base = null;
@@ -73,11 +73,11 @@ $(document).ready(function() {
         ws_url_el
           .attr('data-theme', 'd')
           .click(disconnect);
-        $('.ui-icon', ws_url_el)
+        jQuery('.ui-icon', ws_url_el)
           .addClass('ui-icon-check')
           .removeClass('ui-icon-refresh')
-        $('.ui-btn-text', ws_url_el).text(ws_url);
-        $('#ws_status').text('Connected');
+        jQuery('.ui-btn-text', ws_url_el).text(ws_url);
+        jQuery('#ws_status').text('Connected');
         document.title = title_base + title_sep + 'Connected';
       }
 
@@ -92,24 +92,24 @@ $(document).ready(function() {
         live = false;
         for (var field in ui.values_)
         {
-          var el = $('#'+field);
+          var el = jQuery('#'+field);
           var options = ui.properties_[field].options;
           switch (options.widget)
           {
             case 'color':
               var color = '#'+ui.values_[field].toString(16);
-              $.farbtastic(el.next('.colorpicker')).setColor(color);
+              jQuery.farbtastic(el.next('.colorpicker')).setColor(color);
               break;
             case 'toggle':
               el[0].selectedIndex = ui.values_[field]? 1:0;
               el.slider("refresh");
               break;
             case 'radio':
-              var radios = $('input[type="radio"]', el);
+              var radios = jQuery('input[type="radio"]', el);
               radios.attr('checked', false);
 
               var name = [field, ui.values_[field]].join('_');
-              $('input[type="radio"]#'+name).attr('checked', true);
+              jQuery('input[type="radio"]#'+name).attr('checked', true);
 
               radios.checkboxradio('refresh');
               break;
@@ -122,7 +122,7 @@ $(document).ready(function() {
               el.val(ui.values_[field]);
               break;
 
-            case 'image-list':
+            case 'imagelist':
               console.log("implement me, too!");
               break;
 
@@ -138,11 +138,11 @@ $(document).ready(function() {
         ws_url_el
           .attr('data-theme', 'b')
           .click(connect);
-        $('.ui-icon', ws_url_el)
+        jQuery('.ui-icon', ws_url_el)
           .addClass('ui-icon-refresh')
           .removeClass('ui-icon-check')
-        $('.ui-btn-text', ws_url_el).text("Reconnect");
-        $('#ws_status').text('Disconnected');
+        jQuery('.ui-btn-text', ws_url_el).text("Reconnect");
+        jQuery('#ws_status').text('Disconnected');
         document.title = title_base + title_sep + 'Disconnected';
       }
     } catch(exception) {
