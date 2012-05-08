@@ -15,17 +15,24 @@
   <!--[if IE]><script type="text/javascript" src="http://explorercanvas.googlecode.com/svn/tags/m3/excanvas.compiled.js"></script><![endif]-->
 
   <script id="list-group-template" class="group-template" type="text/x-dot-template">
-    <ul data-role="listview">
+    <ul
+      data-role="listview"
+      class="{{= it.options.template }}-group>"
+      >
       <li>
-        <h1>{{= it.name }}</h1>
+        <h1>{{= it.title }}</h1>
         {{= it.content }}
       </li>
     </ul>
   </script>
   <script id="page-group-template" class="group-template" type="text/x-dot-template">
-    <div data-role="page" id="{{= it.name }}">
+    <div
+      data-role="page"
+      id="{{= it.name }}"
+      class="{{= it.options.template }}-group>"
+      >
       <div data-role="header">
-        <h1>{{= it.name }}</h1>
+        <h1>{{= it.title }}</h1>
       </div>
       <div data-role="content">
         {{= it.content }}
@@ -36,16 +43,20 @@
   </script>
 
   <script id="collapsible-group-template" class="group-template" type="text/x-dot-template">
-    <div data-role="collapsible">
-      <h3>{{= it.name }}</h3>
+    <div
+      data-role="collapsible"
+      class="{{= it.options.template }}-group>"
+      >
+      <h3>{{= it.title }}</h3>
        {{= it.content }}
     </div>
   </script>
 
   <script id="text-field-template" class="field-template" type="text/x-dot-template">
     <div data-role="fieldcontain">
-      <label for="{{= it.name }}">{{= it.name }}:</label>
+      <label for="{{= it.name }}">{{= it.title }}:</label>
       <input
+        class="{{= it.options.template }}-field"
         type="{{= it.options.type }}"
         name="{{= it.name }}"
         id="{{= it.name }}"
@@ -56,8 +67,9 @@
 
   <script id="slider-field-template" class="field-template" type="text/x-dot-template">
     <div data-role="fieldcontain">
-      <label for="{{= it.name }}">{{= it.name }}:</label>
+      <label for="{{= it.name }}">{{= it.title }}:</label>
       <input
+        class="{{= it.options.template }}-field"
         type="range"
         name="{{= it.name }}"
         id="{{= it.name }}"
@@ -72,9 +84,10 @@
   <script id="radio-field-template" class="field-template" type="text/x-dot-template">
     <div data-role="fieldcontain">
       <fieldset data-role="controlgroup" id="{{= it.name }}">
-        <legend>{{= it.name }}</legend>
+        <legend>{{= it.title }}</legend>
         {{~it.options.choices :choice:idx}}
           <input
+            class="{{= it.options.template }}-field"
             type="radio"
             name="{{= it.name }}_{{= idx }}" id="{{= it.name }}_{{= idx }}"
             value="{{= idx }}"
@@ -88,14 +101,16 @@
   <script id="imagelist-field-template" class="field-template" type="text/x-dot-template">
     <div data-role="fieldcontain">
       <fieldset data-role="controlgroup" id="{{= it.name }}">
-        <legend>{{= it.name }}</legend>
+        <legend>{{= it.title }}</legend>
         <ul data-role="listview">
         {{~it.options.choices :item:idx}}
-          <li><a href="#">
-            <img src="{{= item.image }}" />
-            <h3>{{= item.title }}</h3>
-            <p>{{= item.title }}</p>
-          </a></li>
+          <li class="{{= it.options.template }}-field">
+            <a href="#">
+              <img src="{{= item.image }}" />
+              <h3>{{= item.title }}</h3>
+              <p>{{= item.title }}</p>
+            </a>
+          </li>
         {{~}}
       </ul>
       </fieldset>
@@ -104,8 +119,9 @@
 
   <script id="toggle-field-template" class="field-template" type="text/x-dot-template">
     <div data-role="fieldcontain">
-      <label for="{{= it.name }}">{{= it.name }}</label>
+      <label for="{{= it.name }}">{{= it.title }}</label>
       <select
+        class="{{= it.options.template }}-field"
         data-role="slider"
         name="{{= it.name }}"
         id="{{= it.name }}"
@@ -118,8 +134,9 @@
 
   <script id="color-field-template" class="field-template" type="text/x-dot-template">
     <div data-role="fieldcontain">
-      <label for="{{= it.name }}">{{= it.name }}</label>
+      <label for="{{= it.name }}">{{= it.title }}</label>
       <input
+        class="{{= it.options.template }}-field"
         type="text"
         name="{{= it.name }}"
         id="{{= it.name }}"
