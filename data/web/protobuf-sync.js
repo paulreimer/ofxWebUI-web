@@ -4,14 +4,14 @@ function get_value_from_field(el, template, target_id)
   switch (template)
   {
     case 'color':
-      value = parseInt(jQuery('input', el).val().replace('#', '0x'));
+      value = parseInt(el.val().replace('#', '0x'));
       break;
 
     case 'radio':
       var value = -1;
       jQuery('input[type="radio"]', el).each(function(idx, radio) {
-        var checked = (jQuery(el).attr('id') === target_id);
-        jQuery(el)
+        var checked = (el.attr('id') === target_id);
+        el
           .attr('checked', checked)
           .checkboxradio('refresh');
         if (checked)
@@ -24,13 +24,13 @@ function get_value_from_field(el, template, target_id)
       value = ( jQuery('select', el)[0].selectedIndex > 0 );
       break;
 
-    case 'string':
+    case 'text':
     case 'slider':
-      value = jQuery('input', el).val();
+      value = el.val();
       break;
 
     case 'imagelist':
-      value = jQuery(el).index();
+      value = el.index();
       break;
 
     default:
@@ -69,7 +69,7 @@ function set_field_from_value(el, field_name, value, template)
       el.val(value).slider("refresh");
       break;
 
-    case 'string':
+    case 'text':
       el.val(value);
       break;
 

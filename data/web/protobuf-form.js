@@ -3,47 +3,133 @@ jQuery(document).bind("mobileinit", function() {
     , ui = new protobuf.ui
     , macros = {}
     , field_template_els = jQuery('script.field-template')
-    , field_templates = {};
+    , field_templates = {}
+    , group_template_els = jQuery('script.group-template')
+    , group_templates = {}
+    , templateSettings = doT.templateSettings
+    , templateFromClassRegex = /\s*([^\s]+)-field/;
+
+  templateSettings.strip = false;
 
   jQuery.map(field_template_els, function(el, i) {
-    field_templates[el.id] = doT.template(el.text, undefined, macros);
+    field_templates[el.id] = doT.template(el.text, templateSettings, macros);
   });
 
-  for (var field_name in ui.properties_)
+  jQuery.map(group_template_els, function(el, i) {
+    group_templates[el.id] = doT.template(el.text, templateSettings, macros);
+  });
+
+  var render_form = function(obj, root)
   {
-    var options = ui.properties_[field_name].options || {}
-      , field = {
-        'name': field_name,
-        'options' : options
-      }
-      , template_name = field.options.template+'-field-template';
+    if (root === '.')
+      root = '';
 
-    if (template_name in field_templates)
+    var rendered_fields = [];
+    for (var field_name in obj.properties_)
     {
-      var rendered = field_templates[template_name](field)
-        , el = jQuery(rendered)
-        , sendChangeAsProtobuf = function(evt) {
-          if (!live || !ws)
-            return;
+      var type = obj.properties_[field_name].type();
+      switch (type)
+      {
+        default:
+          var options = obj.properties_[field_name].options || {}
+            , template_name = options.template+'-group-template';
 
-          var ui = new protobuf.ui
-            , serialized = (ws.binaryType==='arraybuffer')?
-              new PROTO.ByteArrayStream :
-              new PROTO.Base64Stream
-            , template = evt.data['options']['template'];
+          if (template_name in group_templates)
+          {
+            var group = {
+              'title': field_name,
+              'name': root+field_name,
+              'options': options,
+              'content': render_form(type, root+field_name+'.')
+            }
+            , rendered_group = group_templates[template_name](group);
 
-          ui[evt.data['name']] = get_value_from_field(this, template, evt.target.id);
-          ui.SerializeToStream(serialized);
+            rendered_fields.push(rendered_group);
+          }
+          break;
 
-          ws.send(serialized.getString());
-        };
+        case PROTO.string:
+        //case PROTO.bytes:
+        //case PROTO.array:
+        case PROTO.uint32:
+        case PROTO.sfixed32:
+        case PROTO.fixed32:
+        case PROTO.int32:
+        case PROTO.sint32:
+        case PROTO.uint32:
+        case PROTO.uint64:
+        case PROTO.sfixed64:
+        case PROTO.fixed64:
+        case PROTO.int64:
+        case PROTO.sint64:
+        case PROTO.uint64:
+        case PROTO.Float:
+        case PROTO.Double:
+        case PROTO.bool:
+        case PROTO.string:
+          var options = obj.properties_[field_name].options || {}
+            , field = {
+              'title': field_name,
+              'name': root+field_name,
+              'options': options
+            }
+            , template_name = options.template+'-field-template';
 
-      jQuery(el).change(field, sendChangeAsProtobuf);
-      jQuery('li', el).click(field, sendChangeAsProtobuf);
-
-      form.append(el);
+          if (template_name in field_templates)
+          {
+            var rendered_field = field_templates[template_name](field);
+            rendered_fields.push(rendered_field);
+          }
+        break;
+      }
     }
+    return rendered_fields.join("");
   }
+
+  var rendered_form = render_form(ui, '');
+  jQuery(rendered_form).appendTo(form);//.trigger('create');
+
+  var sendChangeAsProtobuf = function(evt) {
+    if (!live || !ws)
+      return;
+
+    var ui = new protobuf.ui
+      , serialized = (ws.binaryType==='arraybuffer')?
+        new PROTO.ByteArrayStream :
+        new PROTO.Base64Stream
+      , target = jQuery(evt.target)
+      , fieldcontain = target.closest("div[data-role='fieldcontain']")
+      , input = jQuery('input', fieldcontain)
+      , changed = (input.length && input ||
+        target.closest('li.imagelist-field')
+        )
+      , path_to_field = (
+          changed.attr('name') && changed.attr('name').split('.') ||
+          fieldcontain && jQuery('fieldset', fieldcontain)[0].id.split('.'))
+      , template_classes = templateFromClassRegex.exec(changed.attr('class'));
+
+    if (template_classes.length > 1)
+    {
+      var template = template_classes[1]
+        , node = ui
+        , n=path_to_field.length;
+
+      for (var i=0; i<(n-1); i++)
+      {
+        node = node[path_to_field[i]];
+      }
+      node[path_to_field[n-1]] = get_value_from_field(changed, template, evt.target.id);
+
+      ui.SerializeToStream(serialized);
+      ws.send(serialized.getString());
+    }
+  };
+
+  jQuery("div[data-role='fieldcontain']", form)
+    .on('change', sendChangeAsProtobuf);
+
+  jQuery("div[data-role='fieldcontain'] li", form)
+      .on('click', sendChangeAsProtobuf);
 
   jQuery('.colorpicker').each(function() {
     jQuery(this).farbtastic({
