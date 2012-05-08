@@ -14,6 +14,34 @@
 
   <!--[if IE]><script type="text/javascript" src="http://explorercanvas.googlecode.com/svn/tags/m3/excanvas.compiled.js"></script><![endif]-->
 
+  <script id="list-group-template" class="group-template" type="text/x-dot-template">
+    <ul data-role="listview">
+      <li>
+        <h1>{{= it.name }}</h1>
+        {{= it.content }}
+      </li>
+    </ul>
+  </script>
+  <script id="page-group-template" class="group-template" type="text/x-dot-template">
+    <div data-role="page" id="{{= it.name }}">
+      <div data-role="header">
+        <h1>{{= it.name }}</h1>
+      </div>
+      <div data-role="content">
+        {{= it.content }}
+      </div>
+      <div data-role="footer">
+      </div>
+    </div>
+  </script>
+
+  <script id="collapsible-group-template" class="group-template" type="text/x-dot-template">
+    <div data-role="collapsible">
+      <h3>{{= it.name }}</h3>
+       {{= it.content }}
+    </div>
+  </script>
+
   <script id="text-field-template" class="field-template" type="text/x-dot-template">
     <div data-role="fieldcontain">
       <label for="{{= it.name }}">{{= it.name }}:</label>
@@ -43,15 +71,15 @@
 
   <script id="radio-field-template" class="field-template" type="text/x-dot-template">
     <div data-role="fieldcontain">
-      <fieldset data-role="controlgroup" id="{{= name }}">
-        <legend>{{= name }}</legend>
+      <fieldset data-role="controlgroup" id="{{= it.name }}">
+        <legend>{{= it.name }}</legend>
         {{~it.options.choices :choice:idx}}
           <input
             type="radio"
-            name="{{= name }}_{{= idx }}" id="{{= name }}_{{= idx }}"
+            name="{{= it.name }}_{{= idx }}" id="{{= it.name }}_{{= idx }}"
             value="{{= idx }}"
             />
-          <label for="{{= name }}_{{= idx }}">{{= choice }}</label>
+          <label for="{{= it.name }}_{{= idx }}">{{= choice }}</label>
         {{~}}
       </fieldset>
     </div>
@@ -59,8 +87,8 @@
 
   <script id="imagelist-field-template" class="field-template" type="text/x-dot-template">
     <div data-role="fieldcontain">
-      <fieldset data-role="controlgroup" id="{{= name }}">
-        <legend>{{= name }}</legend>
+      <fieldset data-role="controlgroup" id="{{= it.name }}">
+        <legend>{{= it.name }}</legend>
         <ul data-role="listview">
         {{~it.options.choices :item:idx}}
           <li><a href="#">
