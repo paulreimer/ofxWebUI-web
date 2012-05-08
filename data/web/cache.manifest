@@ -5,11 +5,11 @@ CACHE MANIFEST
 /
 
 # css
-http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css
+http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css
 
 # js
 http://code.jquery.com/jquery-1.7.1.min.js
-http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js
+http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js
 
 /farbtastic.min.js
 /doT.min.js
@@ -27,8 +27,8 @@ http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js
 /WebSocketMain.swf
 
 # img
-http://code.jquery.com/mobile/1.0/images/ajax-loader.png
-http://code.jquery.com/mobile/1.0/images/icons-18-white.png
+http://code.jquery.com/mobile/1.1.0/images/ajax-loader.png
+http://code.jquery.com/mobile/1.1.0/images/icons-18-white.png
 
 FALLBACK:
 #/ /admin/offline

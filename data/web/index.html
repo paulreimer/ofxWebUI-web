@@ -10,18 +10,19 @@
   <meta names="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>WebUI</title>
 
-  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css" />
+  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
 
   <!--[if IE]><script type="text/javascript" src="http://explorercanvas.googlecode.com/svn/tags/m3/excanvas.compiled.js"></script><![endif]-->
 
-  <script id="string-field-template" class="field-template" type="text/x-dot-template">
+  <script id="text-field-template" class="field-template" type="text/x-dot-template">
     <div data-role="fieldcontain">
       <label for="{{= it.name }}">{{= it.name }}:</label>
       <input
-        type="text"
+        type="{{= it.options.type }}"
         name="{{= it.name }}"
         id="{{= it.name }}"
-        value="" />
+        {{? 'default_value' in it.options }}value="{{= it.options.default_value }}"{{?}}
+        />
     </div>
   </script>
 
@@ -33,9 +34,10 @@
         name="{{= it.name }}"
         id="{{= it.name }}"
         step="{{= it.options.step }}"
-        value="0"
+        {{? 'default_value' in it.options }}value="{{= it.options.default_value }}"{{?}}
         min="{{= it.options.min }}"
-        max="{{= it.options.max }}" />
+        max="{{= it.options.max }}"
+        />
     </div>
   </script>
 
@@ -47,7 +49,8 @@
           <input
             type="radio"
             name="{{= name }}_{{= idx }}" id="{{= name }}_{{= idx }}"
-            value="{{= idx }}" />
+            value="{{= idx }}"
+            />
           <label for="{{= name }}_{{= idx }}">{{= choice }}</label>
         {{~}}
       </fieldset>
@@ -77,7 +80,8 @@
       <select
         data-role="slider"
         name="{{= it.name }}"
-        id="{{= it.name }}">
+        id="{{= it.name }}"
+        >
         <option value="0">Off</option>
         <option value="1">On</option>
       </select>
@@ -91,7 +95,10 @@
         type="text"
         name="{{= it.name }}"
         id="{{= it.name }}"
-        value="#000000" />
+        {{? 'default_value' in it.options }}value="{{= it.options.default_value }}"{{??}}
+        value="#000000"
+        {{?}}
+        />
       <div class="colorpicker"></div>
     </div>
   </script>
@@ -130,7 +137,7 @@ var live = false;
 
 <script type="text/javascript" charset="utf-8" src="/protobuf-sync.js"></script>
 <script type="text/javascript" charset="utf-8" src="/protobuf-form.js"></script>
-<script type="text/javascript" charset="utf-8" src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>
 
 <script type="text/javascript" charset="utf-8" src="/protobuf-init.js"></script>
 </body>
