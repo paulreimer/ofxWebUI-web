@@ -1,8 +1,8 @@
 CACHE MANIFEST
 
-#v2
+#v1
 
-http://cdn.p-rimes.net/ofxWebUI/index.html
+/index.html
 
 # css
 http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css
