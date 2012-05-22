@@ -1,22 +1,5 @@
 jQuery(document).bind("mobileinit", function() {
   var form = jQuery('#form')
-/*
-    , field_template_els = jQuery('script.field-template')
-    , field_templates = {}
-    , group_template_els = jQuery('script.group-template')
-    , group_templates = {}
-    , macros = {}
-    , templateSettings = doT.templateSettings
-    , templateFromClassRegex = /\s*([^\s]+)-field/;
-
-  jQuery.map(field_template_els, function(el, i) {
-    field_templates[el.id] = doT.template(el.text, templateSettings, macros);
-  });
-
-  jQuery.map(group_template_els, function(el, i) {
-    group_templates[el.id] = doT.template(el.text, templateSettings, macros);
-  });
-*/
 
   var ui = new protobuf.ui;
   var render_form = function(obj, root)
