@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <!-- <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" manifest="/cache.manifest"> -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta names="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>WebUI</title>
+
+  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
+
+  <!--[if IE]><script type="text/javascript" src="http://explorercanvas.googlecode.com/svn/tags/m3/excanvas.compiled.js"></script><![endif]-->
+</head>
+<body>
+<div data-role="page">
+
+  <div data-role="header" data-theme="b">
+    <a href="#" data-icon="refresh" id="ws_url">Connect</a>
+    <h1 id="ws_status">WebUI | Not initialized</h1>
+    <a href="#" data-icon="gear">Options</a>
+  </div>
+
+  <div data-role="content" id="form">
+  </div>
+</div>
+
+<script type="text/javascript" charset="utf-8" type="text/javascript" src="swfobject.js"></script>
+<script type="text/javascript" charset="utf-8" type="text/javascript" src="web_socket.min.js"></script>
+
+<script type="text/javascript" charset="utf-8">
+window.scrollTo(0, 1);
+
+WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
+
+var ws;
+var live = false;
+var field_templates = {};
+var group_templates = {};
+</script>
+
+<script type="text/javascript" charset="utf-8" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="/farbtastic.min.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="/protobuf.js"></script>
+<script type="text/javascript" charset="utf-8" src="/ui.proto.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="/ui.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>
+</body>
+</html>
+
