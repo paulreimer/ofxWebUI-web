@@ -1,4 +1,0 @@
-if (typeof(protobuf)=="undefined") {protobuf = {};}
-
-protobuf.ui = PROTO.Message("protobuf.ui",{
-	});
