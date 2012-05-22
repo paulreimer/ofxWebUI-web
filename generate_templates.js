@@ -2,8 +2,8 @@ var fs          = require('fs')
   , jQuery      = require('jquery')
   , doT         = require('dot')
   , util        = require('util')
-  , inputFile   = 'index.html.templates'
-  , outputFile  = 'web/ui-templates.js'
+  , inputFile   = 'templates.html'
+  , outputFile  = 'ui-templates.js'
 
 fs.readFile(inputFile, function (err, data) {
   if (err) throw err;
