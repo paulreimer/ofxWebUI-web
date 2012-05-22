@@ -1,15 +1,13 @@
 jQuery(document).bind("mobileinit", function() {
   var form = jQuery('#form')
-    , ui = new protobuf.ui
-    , macros = {}
+/*
     , field_template_els = jQuery('script.field-template')
     , field_templates = {}
     , group_template_els = jQuery('script.group-template')
     , group_templates = {}
+    , macros = {}
     , templateSettings = doT.templateSettings
     , templateFromClassRegex = /\s*([^\s]+)-field/;
-
-  templateSettings.strip = false;
 
   jQuery.map(field_template_els, function(el, i) {
     field_templates[el.id] = doT.template(el.text, templateSettings, macros);
@@ -18,7 +16,9 @@ jQuery(document).bind("mobileinit", function() {
   jQuery.map(group_template_els, function(el, i) {
     group_templates[el.id] = doT.template(el.text, templateSettings, macros);
   });
+*/
 
+  var ui = new protobuf.ui;
   var render_form = function(obj, root)
   {
     if (root === '.')
@@ -108,6 +108,7 @@ jQuery(document).bind("mobileinit", function() {
           fieldcontain && jQuery('fieldset', fieldcontain)[0].id.split('.'))
       , template_classes = templateFromClassRegex.exec(changed.attr('class'));
 
+    //TODO: handle radio buttons
     if (template_classes.length > 1)
     {
       var template = template_classes[1]

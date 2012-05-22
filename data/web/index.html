@@ -13,140 +13,6 @@
   <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
 
   <!--[if IE]><script type="text/javascript" src="http://explorercanvas.googlecode.com/svn/tags/m3/excanvas.compiled.js"></script><![endif]-->
-
-  <script id="list-group-template" class="group-template" type="text/x-dot-template">
-    <ul
-      data-role="listview"
-      class="{{= it.options.template }}-group>"
-      >
-      <li>
-        <h1>{{= it.title }}</h1>
-        {{= it.content }}
-      </li>
-    </ul>
-  </script>
-  <script id="page-group-template" class="group-template" type="text/x-dot-template">
-    <div
-      data-role="page"
-      id="{{= it.name }}"
-      class="{{= it.options.template }}-group>"
-      >
-      <div data-role="header">
-        <h1>{{= it.title }}</h1>
-      </div>
-      <div data-role="content">
-        {{= it.content }}
-      </div>
-      <div data-role="footer">
-      </div>
-    </div>
-  </script>
-
-  <script id="collapsible-group-template" class="group-template" type="text/x-dot-template">
-    <div
-      data-role="collapsible"
-      class="{{= it.options.template }}-group>"
-      >
-      <h3>{{= it.title }}</h3>
-       {{= it.content }}
-    </div>
-  </script>
-
-  <script id="text-field-template" class="field-template" type="text/x-dot-template">
-    <div data-role="fieldcontain">
-      <label for="{{= it.name }}">{{= it.title }}:</label>
-      <input
-        class="{{= it.options.template }}-field"
-        type="{{= it.options.type }}"
-        name="{{= it.name }}"
-        id="{{= it.name }}"
-        {{? 'default_value' in it.options }}value="{{= it.options.default_value }}"{{?}}
-        />
-    </div>
-  </script>
-
-  <script id="slider-field-template" class="field-template" type="text/x-dot-template">
-    <div data-role="fieldcontain">
-      <label for="{{= it.name }}">{{= it.title }}:</label>
-      <input
-        class="{{= it.options.template }}-field"
-        type="range"
-        name="{{= it.name }}"
-        id="{{= it.name }}"
-        step="{{= it.options.step }}"
-        {{? 'default_value' in it.options }}value="{{= it.options.default_value }}"{{?}}
-        min="{{= it.options.min }}"
-        max="{{= it.options.max }}"
-        />
-    </div>
-  </script>
-
-  <script id="radio-field-template" class="field-template" type="text/x-dot-template">
-    <div data-role="fieldcontain">
-      <fieldset data-role="controlgroup" id="{{= it.name }}">
-        <legend>{{= it.title }}</legend>
-        {{~it.options.choices :choice:idx}}
-          <input
-            class="{{= it.options.template }}-field"
-            type="radio"
-            name="{{= it.name }}_{{= idx }}" id="{{= it.name }}_{{= idx }}"
-            value="{{= idx }}"
-            />
-          <label for="{{= it.name }}_{{= idx }}">{{= choice }}</label>
-        {{~}}
-      </fieldset>
-    </div>
-  </script>
-
-  <script id="imagelist-field-template" class="field-template" type="text/x-dot-template">
-    <div data-role="fieldcontain">
-      <fieldset data-role="controlgroup" id="{{= it.name }}">
-        <legend>{{= it.title }}</legend>
-        <ul data-role="listview">
-        {{~it.options.choices :item:idx}}
-          <li class="{{= it.options.template }}-field">
-            <a href="#">
-              <img src="{{= item.image }}" />
-              <h3>{{= item.title }}</h3>
-              <p>{{= item.title }}</p>
-            </a>
-          </li>
-        {{~}}
-      </ul>
-      </fieldset>
-    </div>
-  </script>
-
-  <script id="toggle-field-template" class="field-template" type="text/x-dot-template">
-    <div data-role="fieldcontain">
-      <label for="{{= it.name }}">{{= it.title }}</label>
-      <select
-        class="{{= it.options.template }}-field"
-        data-role="slider"
-        name="{{= it.name }}"
-        id="{{= it.name }}"
-        >
-        <option value="0">Off</option>
-        <option value="1">On</option>
-      </select>
-    </div>
-  </script>
-
-  <script id="color-field-template" class="field-template" type="text/x-dot-template">
-    <div data-role="fieldcontain">
-      <label for="{{= it.name }}">{{= it.title }}</label>
-      <input
-        class="{{= it.options.template }}-field"
-        type="text"
-        name="{{= it.name }}"
-        id="{{= it.name }}"
-        {{? 'default_value' in it.options }}value="{{= it.options.default_value }}"{{??}}
-        value="#000000"
-        {{?}}
-        />
-      <div class="colorpicker"></div>
-    </div>
-  </script>
 </head>
 <body>
 <div data-role="page">
@@ -171,20 +37,18 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
 
 var ws;
 var live = false;
+var field_templates = {};
+var group_templates = {};
 </script>
 
 <script type="text/javascript" charset="utf-8" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-<script type="text/javascript" charset="utf-8" src="/doT.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="/farbtastic.min.js"></script>
 
 <script type="text/javascript" charset="utf-8" src="/protobuf.js"></script>
 <script type="text/javascript" charset="utf-8" src="/ui.proto.js"></script>
 
-<script type="text/javascript" charset="utf-8" src="/protobuf-sync.js"></script>
-<script type="text/javascript" charset="utf-8" src="/protobuf-form.js"></script>
+<script type="text/javascript" charset="utf-8" src="/ui.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>
-
-<script type="text/javascript" charset="utf-8" src="/protobuf-init.js"></script>
 </body>
 </html>
 
