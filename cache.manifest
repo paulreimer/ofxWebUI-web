@@ -2,7 +2,7 @@ CACHE MANIFEST
 
 #v1
 
-/index.html
+/
 
 # css
 http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css
@@ -23,7 +23,7 @@ http://cdn.p-rimes.net/ofxWebUI/ui.min.js
 /ui.proto.js
 
 # swf
-http://cdn.p-rimes.net/ofxWebUI/WebSocketMain.swf
+#/WebSocketMain.swf
 
 # img
 http://code.jquery.com/mobile/1.1.0/images/ajax-loader.png
