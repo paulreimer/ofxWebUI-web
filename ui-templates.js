@@ -1,3 +1,13 @@
+/*
+ * Copyright Paul Reimer, 2012
+ *
+ * This work is licensed under the Creative Commons Attribution-NonCommercial 3.0 Unported License.
+ * To view a copy of this license, visit
+ * http://creativecommons.org/licenses/by-nc/3.0/
+ * or send a letter to
+ * Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
+ */
+
 field_templates['text-field-template'] = function(it) {
 var out=' <div data-role="fieldcontain"> <label for="'+( it.name )+'">'+( it.title )+':</label> <input class="'+( it.options.template )+'-field" type="'+( it.options.type )+'" name="'+( it.name )+'" id="'+( it.name )+'" ';if('default_value' in it.options){out+='value="'+( it.options.default_value )+'"';}out+=' /> </div> ';return out;
 };
