@@ -26,7 +26,7 @@ http://cdn.p-rimes.net/ofxWebUI/ui.min.js
 #/WebSocketMain.swf
 
 # img
-http://code.jquery.com/mobile/1.1.0/images/ajax-loader.png
+http://code.jquery.com/mobile/1.1.0/images/ajax-loader.gif
 http://code.jquery.com/mobile/1.1.0/images/icons-18-white.png
 
 FALLBACK:
