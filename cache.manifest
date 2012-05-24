@@ -12,7 +12,6 @@ http://code.jquery.com/jquery-1.7.1.min.js
 http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js
 
 http://cdn.p-rimes.net/ofxWebUI/farbtastic.min.js
-#http://cdn.p-rimes.net/ofxWebUI/doT.min.js
 
 http://cdn.p-rimes.net/ofxWebUI/swfobject.js
 http://cdn.p-rimes.net/ofxWebUI/web_socket.min.js
@@ -20,7 +19,7 @@ http://cdn.p-rimes.net/ofxWebUI/protobuf.js
 
 http://cdn.p-rimes.net/ofxWebUI/ui.min.js
 
-/ui.proto.js
+#/ui.proto.js
 
 # swf
 #/WebSocketMain.swf
