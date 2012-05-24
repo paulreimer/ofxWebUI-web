@@ -10,9 +10,9 @@
 
 jQuery(document).bind("mobileinit", function() {
   var form = jQuery('#form')
-
-  var ui = new protobuf.ui;
-  var render_form = function(obj, root)
+    , templateFromClassRegex = /\s*([^\s]+)-field/
+    , ui = new protobuf.ui
+    , render_form = function(obj, root)
   {
     if (root === '.')
       root = '';
