@@ -11,12 +11,9 @@
 jQuery(document).ready(function() {
   var ws_url_el = jQuery("#ws_url");
   var title_sep = ' | ';
-  /*
-  var title_base = null;
+  var title_base = document.title;
   if (document.title.indexOf(title_sep)>=0)
     title_base = document.title.split(title_sep)[0]
-  */
-  var title_base = "G++ Sign";
 
   var disconnect = function() {
     try {
