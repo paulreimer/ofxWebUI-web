@@ -51,7 +51,7 @@ function get_value_from_field(el, template, target_id)
   return value;
 }
 
-function set_field_from_value(el, field_name, value, template)
+function set_field_from_value(el, template, value)
 {
   switch (template)
   {
@@ -67,11 +67,10 @@ function set_field_from_value(el, field_name, value, template)
 
     case 'radio':
       var radios = jQuery('input[type="radio"]', el);
-      radios.attr('checked', false);
-
-      var name = [field_name, value].join('_');
-      jQuery('input[type="radio"]#'+name).attr('checked', true);
-
+      jQuery.each(radios, function(idx, radio) { 
+        var selected = (radio.id().lastIndexOf('_'+value) != -1);
+          radio.attr('checked', selected);
+      });
       radios.checkboxradio('refresh');
       break;
 
