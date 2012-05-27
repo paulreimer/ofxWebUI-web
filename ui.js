@@ -78,7 +78,7 @@ function get_value_from_field(el, template, target_id)
   return value;
 }
 
-function set_field_from_value(el, field_name, value, template)
+function set_field_from_value(el, template, value)
 {
   switch (template)
   {
@@ -94,11 +94,10 @@ function set_field_from_value(el, field_name, value, template)
 
     case 'radio':
       var radios = jQuery('input[type="radio"]', el);
-      radios.attr('checked', false);
-
-      var name = [field_name, value].join('_');
-      jQuery('input[type="radio"]#'+name).attr('checked', true);
-
+      jQuery.each(radios, function(idx, radio) { 
+        var selected = (radio.id().lastIndexOf('_'+value) != -1);
+          radio.attr('checked', selected);
+      });
       radios.checkboxradio('refresh');
       break;
 
@@ -154,40 +153,29 @@ function get_appropriate_ws_url(port)
 
 jQuery(document).bind("mobileinit", function() {
   var form = jQuery('#form')
-/*
-    , field_template_els = jQuery('script.field-template')
-    , field_templates = {}
-    , group_template_els = jQuery('script.group-template')
-    , group_templates = {}
-    , macros = {}
-    , templateSettings = doT.templateSettings
-    , templateFromClassRegex = /\s*([^\s]+)-field/;
-
-  jQuery.map(field_template_els, function(el, i) {
-    field_templates[el.id] = doT.template(el.text, templateSettings, macros);
-  });
-
-  jQuery.map(group_template_els, function(el, i) {
-    group_templates[el.id] = doT.template(el.text, templateSettings, macros);
-  });
-*/
-
-  var ui = new protobuf.ui;
-  var render_form = function(obj, root)
+    , templateFromClassRegex = /\s*([^\s]+)-field/
+    , ui = new protobuf.ui
+  // recursively render templates for each protobuf nested message or field
+    , render_form = function(obj, root)
   {
+    // use dot notation to denote global position in recursion so far
     if (root === '.')
       root = '';
 
+    // list of strings of rendered templates for fields at this depth
     var rendered_fields = [];
     for (var field_name in obj.properties_)
     {
+      // get protobuf field type
       var type = obj.properties_[field_name].type();
       switch (type)
       {
+        // assume container template
         default:
           var options = obj.properties_[field_name].options || {}
             , template_name = options.template+'-group-template';
 
+          // recurse if container template found
           if (template_name in group_templates)
           {
             var group = {
@@ -198,13 +186,17 @@ jQuery(document).bind("mobileinit", function() {
             }
             , rendered_group = group_templates[template_name](group);
 
+            // append to list of fields at this depth
             rendered_fields.push(rendered_group);
           }
           break;
 
-        case PROTO.string:
-        //case PROTO.bytes:
-        //case PROTO.array:
+        // unsupported fields
+        case PROTO.bytes:
+        case PROTO.array:
+          break;
+
+        // supported fields
         case PROTO.uint32:
         case PROTO.sfixed32:
         case PROTO.fixed32:
@@ -229,63 +221,74 @@ jQuery(document).bind("mobileinit", function() {
             }
             , template_name = options.template+'-field-template';
 
+          // render template if found
           if (template_name in field_templates)
           {
             var rendered_field = field_templates[template_name](field);
+            // append to list of fields at this depth
             rendered_fields.push(rendered_field);
           }
         break;
       }
     }
+
+    // concatenate rendered templates at this depth
     return rendered_fields.join("");
   }
 
   var rendered_form = render_form(ui, '');
-  jQuery(rendered_form).appendTo(form);//.trigger('create');
+  jQuery(rendered_form).appendTo(form);
 
   var sendChangeAsProtobuf = function(evt) {
     if (!live || !ws)
       return;
 
     var ui = new protobuf.ui
-      , serialized = (ws.binaryType==='arraybuffer')?
-        new PROTO.ByteArrayStream :
-        new PROTO.Base64Stream
-      , target = jQuery(evt.target)
-      , fieldcontain = target.closest("div[data-role='fieldcontain']")
-      , input = jQuery('input', fieldcontain)
-      , changed = (input.length && input ||
-        target.closest('li.imagelist-field')
-        )
+      , serialized = useBinary? new PROTO.ByteArrayStream : new PROTO.Base64Stream
+      , target_el = jQuery(evt.target)
+      , fieldcontain = target_el.closest("div[data-role='fieldcontain']")
+      , input_el = jQuery('input', fieldcontain)
+      , changed_el = (input_el.length && input_el || target_el.closest('li.imagelist-field'))
       , path_to_field = (
-          changed.attr('name') && changed.attr('name').split('.') ||
+          changed_el.attr('name') && changed_el.attr('name').split('.') ||
           fieldcontain && jQuery('fieldset', fieldcontain)[0].id.split('.'))
-      , template_classes = templateFromClassRegex.exec(changed.attr('class'));
+      , template_class_search_results = templateFromClassRegex.exec(changed_el.attr('class'));
 
     //TODO: handle radio buttons
-    if (template_classes.length > 1)
+    if (template_class_search_results.length > 1)
     {
-      var template = template_classes[1]
+      var template = template_class_search_results[1]
         , node = ui
         , n=path_to_field.length;
 
+      // protobuf nested messages walk
       for (var i=0; i<(n-1); i++)
       {
         node = node[path_to_field[i]];
       }
-      node[path_to_field[n-1]] = get_value_from_field(changed, template, evt.target.id);
+      // have field
+      node[path_to_field[n-1]] = get_value_from_field(changed_el, template, evt.target.id);
 
       ui.SerializeToStream(serialized);
-      ws.send(serialized.getString());
+      if (useBinary)
+      {
+        var bytes = new Uint8Array(serialized.getArray());
+        ws.send(bytes.buffer);
+      }
+      else
+        ws.send(serialized.getString());
     }
   };
 
+  // Map change events to send protobuf message
   jQuery("div[data-role='fieldcontain']", form)
     .on('change', sendChangeAsProtobuf);
 
+  // also map list element clicks
   jQuery("div[data-role='fieldcontain'] li", form)
       .on('click', sendChangeAsProtobuf);
 
+  // replace color field inner divs with farbtastic color picker
   jQuery('.colorpicker').each(function() {
     jQuery(this).farbtastic({
       callback: jQuery(this).prev('input'),
@@ -294,15 +297,12 @@ jQuery(document).bind("mobileinit", function() {
   });
 });
 
-jQuery(document).ready(function() {
+jQuery(document).bind("pageinit", function() {
   var ws_url_el = jQuery("#ws_url");
   var title_sep = ' | ';
-  /*
-  var title_base = null;
+  var title_base = document.title;
   if (document.title.indexOf(title_sep)>=0)
     title_base = document.title.split(title_sep)[0]
-  */
-  var title_base = "G++ Sign";
 
   var disconnect = function() {
     try {
@@ -315,7 +315,7 @@ jQuery(document).ready(function() {
     }
   };
   var connect = function() {
-    var ws_url = get_appropriate_ws_url(7681);
+    var ws_url = get_appropriate_ws_url();
     try {
       if (window.MozWebSocket)
         ws = new MozWebSocket(ws_url, "ofx");
@@ -324,12 +324,11 @@ jQuery(document).ready(function() {
       else
         return;
 
-      /*
       if (ws.binaryType)
       {
+        useBinary = false;
         ws.binaryType = 'arraybuffer';
       }
-      */
 
       ws.onopen = function() {
         ws_url_el
@@ -351,20 +350,46 @@ jQuery(document).ready(function() {
 
       ws.onmessage = function(msg) {
         var ui = new protobuf.ui;
-        var serialized = (ws.binaryType==='arraybuffer')?
-          new PROTO.ByteArrayStream(msg.data) :
-          new PROTO.Base64Stream(msg.data);
+        var serialized;
+        if (useBinary)
+        {
+          var bytes = new Uint8Array(msg.data);
+          var arr = [];
+          for (var i=0,n=bytes.length; i<n; ++i)
+            arr.push(bytes[i]);
+
+          serialized = new PROTO.ByteArrayStream(arr);
+        }
+        else {
+          serialized = new PROTO.Base64Stream(msg.data);
+        }
 
         ui.ParseFromStream(serialized);
 
         live = false;
-        for (var field_name in ui.values_)
+        var update_fields = function(obj, root)
         {
-          var el = jQuery('#'+field_name);
-          var options = ui.properties_[field_name].options;
-          if (el)
-            set_field_from_value(el, ui.values_[field_name], options.template);
+          if (root === '.')
+            root = '';
+
+          for (var field_name in obj.values_)
+          {
+            //console.log('lookup id: <' + '#'+root+field_name+'>');
+            var el = jQuery(document.getElementById(root+field_name))
+              , options = obj.properties_[field_name].options
+              , template_name = options.template+'-group-template';
+
+            if (el)
+            {
+              if (template_name in group_templates)
+                update_fields(obj.values_[field_name], root+field_name+'.'); 
+              else {
+                set_field_from_value(el, options.template, obj.values_[field_name]);
+              }
+            }
+          }
         }
+        update_fields(ui, '');
         live = true;
       } 
 
