@@ -8,7 +8,7 @@
  * Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
  */
 
-jQuery(document).ready(function() {
+jQuery(document).bind("pageinit", function() {
   var ws_url_el = jQuery("#ws_url");
   var title_sep = ' | ';
   var title_base = document.title;
@@ -26,7 +26,7 @@ jQuery(document).ready(function() {
     }
   };
   var connect = function() {
-    var ws_url = get_appropriate_ws_url(7681);
+    var ws_url = get_appropriate_ws_url();
     try {
       if (window.MozWebSocket)
         ws = new MozWebSocket(ws_url, "ofx");
@@ -35,12 +35,11 @@ jQuery(document).ready(function() {
       else
         return;
 
-      /*
       if (ws.binaryType)
       {
+        useBinary = false;
         ws.binaryType = 'arraybuffer';
       }
-      */
 
       ws.onopen = function() {
         ws_url_el
@@ -62,20 +61,46 @@ jQuery(document).ready(function() {
 
       ws.onmessage = function(msg) {
         var ui = new protobuf.ui;
-        var serialized = (ws.binaryType==='arraybuffer')?
-          new PROTO.ByteArrayStream(msg.data) :
-          new PROTO.Base64Stream(msg.data);
+        var serialized;
+        if (useBinary)
+        {
+          var bytes = new Uint8Array(msg.data);
+          var arr = [];
+          for (var i=0,n=bytes.length; i<n; ++i)
+            arr.push(bytes[i]);
+
+          serialized = new PROTO.ByteArrayStream(arr);
+        }
+        else {
+          serialized = new PROTO.Base64Stream(msg.data);
+        }
 
         ui.ParseFromStream(serialized);
 
         live = false;
-        for (var field_name in ui.values_)
+        var update_fields = function(obj, root)
         {
-          var el = jQuery('#'+field_name);
-          var options = ui.properties_[field_name].options;
-          if (el)
-            set_field_from_value(el, ui.values_[field_name], options.template);
+          if (root === '.')
+            root = '';
+
+          for (var field_name in obj.values_)
+          {
+            //console.log('lookup id: <' + '#'+root+field_name+'>');
+            var el = jQuery(document.getElementById(root+field_name))
+              , options = obj.properties_[field_name].options
+              , template_name = options.template+'-group-template';
+
+            if (el)
+            {
+              if (template_name in group_templates)
+                update_fields(obj.values_[field_name], root+field_name+'.'); 
+              else {
+                set_field_from_value(el, options.template, obj.values_[field_name]);
+              }
+            }
+          }
         }
+        update_fields(ui, '');
         live = true;
       } 
 
