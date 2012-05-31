@@ -17,8 +17,11 @@ var out=' <div data-role="fieldcontain"> <label for="'+( it.name )+'">'+( it.tit
 field_templates['radio-field-template'] = function(it) {
 var out=' <div data-role="fieldcontain"> <fieldset data-role="controlgroup" id="'+( it.name )+'"> <legend>'+( it.title )+'</legend> ';var arr1=it.options.choices;if(arr1){var idx=-1,l1=arr1.length-1;while(idx<l1){choice=arr1[idx+=1];out+=' <input class="'+( it.options.template )+'-field" type="radio" name="'+( it.name )+'_'+( idx )+'" id="'+( it.name )+'_'+( idx )+'" value="'+( idx )+'" /> <label for="'+( it.name )+'_'+( idx )+'">'+( choice )+'</label> ';} } out+=' </fieldset> </div> ';return out;
 };
-field_templates['imagelist-field-template'] = function(it) {
+field_templates['imagemap-field-template'] = function(it) {
 var out=' <div data-role="fieldcontain"> <fieldset data-role="controlgroup" id="'+( it.name )+'"> <legend>'+( it.title )+'</legend> <ul data-role="listview"> ';var arr1=it.options.choices;if(arr1){var idx=-1,l1=arr1.length-1;while(idx<l1){item=arr1[idx+=1];out+=' <li class="'+( it.options.template )+'-field"> <a href="#"> <img src="'+( item.image )+'" /> <h3>'+( item.title )+'</h3> <p>'+( item.title )+'</p> </a> </li> ';} } out+=' </ul> </fieldset> </div> ';return out;
+};
+field_templates['imagelist-field-template'] = function(it) {
+var out=' <div data-role="fieldcontain"> <fieldset data-role="controlgroup" id="'+( it.name )+'"> <legend>'+( it.title )+'</legend> <ul data-role="listview"> ';var arr1=it.options.choices;if(arr1){var idx=-1,l1=arr1.length-1;while(idx<l1){item=arr1[idx+=1];out+=' <li class="'+( it.options.template )+'-field"> <a href="#"> <img class="thumbnail" id="thumbnail-'+( idx )+'" src="http://sign-cdn.limbicmedia.ca/blank.gif" /> <h3>'+( item.title )+'</h3> <p>'+( item.title )+'</p> </a> </li> ';} } out+=' </ul> </fieldset> </div> ';return out;
 };
 field_templates['toggle-field-template'] = function(it) {
 var out=' <div data-role="fieldcontain"> <label for="'+( it.name )+'">'+( it.title )+'</label> <select class="'+( it.options.template )+'-field" data-role="slider" name="'+( it.name )+'" id="'+( it.name )+'" > <option value="0">Off</option> <option value="1">On</option> </select> </div> ';return out;
