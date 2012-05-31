@@ -86,7 +86,7 @@
     </div>
   </script>
 
-  <script id="imagelist-field-template" class="field-template" type="text/x-dot-template">
+  <script id="imagemap-field-template" class="field-template" type="text/x-dot-template">
     <div data-role="fieldcontain">
       <fieldset data-role="controlgroup" id="{{= it.name }}">
         <legend>{{= it.title }}</legend>
@@ -95,6 +95,25 @@
           <li class="{{= it.options.template }}-field">
             <a href="#">
               <img src="{{= item.image }}" />
+              <h3>{{= item.title }}</h3>
+              <p>{{= item.title }}</p>
+            </a>
+          </li>
+        {{~}}
+      </ul>
+      </fieldset>
+    </div>
+  </script>
+
+  <script id="imagelist-field-template" class="field-template" type="text/x-dot-template">
+    <div data-role="fieldcontain">
+      <fieldset data-role="controlgroup" id="{{= it.name }}">
+        <legend>{{= it.title }}</legend>
+        <ul data-role="listview">
+        {{~it.options.choices :item:idx}}
+          <li class="{{= it.options.template }}-field">
+            <a href="#">
+              <img class="thumbnail" id="thumbnail-{{= idx }}" src="http://sign-cdn.limbicmedia.ca/blank.gif" />
               <h3>{{= item.title }}</h3>
               <p>{{= item.title }}</p>
             </a>
