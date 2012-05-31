@@ -105,7 +105,7 @@ jQuery(document).bind("mobileinit", function() {
       , target_el = jQuery(evt.target)
       , fieldcontain = target_el.closest("div[data-role='fieldcontain']")
       , input_el = jQuery('input', fieldcontain)
-      , changed_el = (input_el.length && input_el || target_el.closest('li.imagelist-field'))
+      , changed_el = (input_el.length && input_el || target_el.closest('li.imagemap-field'))
       , path_to_field = (
           changed_el.attr('name') && changed_el.attr('name').split('.') ||
           fieldcontain && jQuery('fieldset', fieldcontain)[0].id.split('.'))

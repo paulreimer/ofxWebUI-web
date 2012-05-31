@@ -39,7 +39,7 @@ function get_value_from_field(el, template, target_id)
       value = el.val();
       break;
 
-    case 'imagelist':
+    case 'imagemap':
       value = el.index();
       break;
 
@@ -82,7 +82,7 @@ function set_field_from_value(el, template, value)
       el.val(value);
       break;
 
-    case 'imagelist':
+    case 'imagemap':
       console.log("implement me");
       break;
 
