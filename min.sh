@@ -1,11 +1,13 @@
 #!/bin/sh
 
+: > ui-deps.min.js
+yuicompressor swfobject.js    >> ui-deps.min.js
+yuicompressor web_socket.js   >> ui-deps.min.js
+yuicompressor farbtastic.js   >> ui-deps.min.js
+yuicompressor protobuf.js     >> ui-deps.min.js
+
 : > ui.min.js
-yuicompressor swfobject.js >> ui.min.js
-yuicompressor web_socket.js >> ui.min.js
-yuicompressor farbtastic.js >> ui.min.js
-yuicompressor protobuf.js >> ui.min.js
 yuicompressor ui-templates.js >> ui.min.js
-yuicompressor ui-sync.js >> ui.min.js
-yuicompressor ui-form.js >> ui.min.js
-yuicompressor ui-init.js >> ui.min.js
+yuicompressor ui-sync.js      >> ui.min.js
+yuicompressor ui-form.js      >> ui.min.js
+yuicompressor ui-init.js      >> ui.min.js
