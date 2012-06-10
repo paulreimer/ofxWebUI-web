@@ -43,6 +43,10 @@ function get_value_from_field(el, template, target_id)
       value = el.index();
       break;
 
+    case 'imagelist':
+      value = el.index();
+      break;
+
     default:
       value = el.value;
       break;
@@ -83,7 +87,11 @@ function set_field_from_value(el, template, value)
       break;
 
     case 'imagemap':
-      console.log("implement me");
+      console.log("Received broadcast for unknown field type: imagemap");
+      break;
+
+    case 'imagelist':
+      console.log("Received broadcast for unknown field type: imagelist");
       break;
 
     default:
