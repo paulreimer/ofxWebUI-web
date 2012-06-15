@@ -8,7 +8,7 @@
  * Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
  */
 
-jQuery(document).bind("pageinit", function() {
+var setupWebUI = function() {
   var ws_url_el = jQuery("#ws_url");
   var title_sep = ' | ';
   var title_base = document.title;
@@ -128,5 +128,6 @@ jQuery(document).bind("pageinit", function() {
 
   connect();
   ws_url_el.click(connect);
-});
+};
 
+jQuery(document).on("pageinit", setupWebUI);

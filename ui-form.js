@@ -8,7 +8,7 @@
  * Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
  */
 
-jQuery(document).bind("mobileinit", function() {
+var setupFormHooks = function() {
   var form = jQuery('#form')
     , templateFromClassRegex = /\s*([^\s]+)-field/
     , ui = new protobuf.ui
@@ -154,5 +154,6 @@ jQuery(document).bind("mobileinit", function() {
       width: 200
     });
   });
-});
+};
 
+jQuery(document).on("mobileinit", setupFormHooks);
