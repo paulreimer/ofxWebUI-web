@@ -15,7 +15,11 @@ var setupWebUI = function() {
   if (document.title.indexOf(title_sep)>=0)
     title_base = document.title.split(title_sep)[0]
 
+  var reconnect_dialog_el = jQuery("#reconnect-dialog");
+  var reconnect_button_el = jQuery("#reconnect-button");
+
   var disconnect = function() {
+    shouldReconnect = false;
     try {
       if (ws.readyState !== ws.CLOSING && ws.readyState !== ws.CLOSED)
       {
@@ -29,9 +33,9 @@ var setupWebUI = function() {
     var ws_url = get_appropriate_ws_url();
     try {
       if (window.MozWebSocket)
-        ws = new MozWebSocket(ws_url, "ofx");
+        ws = new MozWebSocket(ws_url, "ofxWebUI");
       else if (window.WebSocket)
-        ws = new WebSocket(ws_url, "ofx");
+        ws = new WebSocket(ws_url, "ofxWebUI");
       else
         return;
 
@@ -57,6 +61,10 @@ var setupWebUI = function() {
           .text('Connected');
 
         document.title = title_base + title_sep + 'Connected';
+
+        shouldReconnect = true;
+        if (reconnect_dialog_el.is(':visible'))
+          reconnect_dialog_el.dialog('close');
       }
 
       ws.onmessage = function(msg) {
@@ -85,7 +93,6 @@ var setupWebUI = function() {
 
           for (var field_name in obj.values_)
           {
-            //console.log('lookup id: <' + '#'+root+field_name+'>');
             var el = jQuery(document.getElementById(root+field_name))
               , options = obj.properties_[field_name].options
               , template_name = options.template+'-group-template';
@@ -120,6 +127,16 @@ var setupWebUI = function() {
           .text('Disconnected');
 
         document.title = title_base + title_sep + 'Disconnected';
+
+        if (shouldReconnect)
+        {
+          shouldReconnect = false;
+          jQuery.mobile.changePage(reconnect_dialog_el, {
+            transition: 'pop',
+            role: 'dialog',
+            reverse: false
+          });
+        }
       }
     } catch(exception) {
       console.log('Error' + exception);  
@@ -128,6 +145,7 @@ var setupWebUI = function() {
 
   connect();
   ws_url_el.click(connect);
+  reconnect_button_el.click(connect);
 };
 
-jQuery(document).on("pageinit", setupWebUI);
+jQuery(document).on("mobileinit", setupWebUI);
