@@ -1,5 +1,5 @@
 /*
- * Copyright Paul Reimer, 2012
+ * Copyright Paul Reimer/Limbic Media 2012
  *
  * This work is licensed under the Creative Commons Attribution-NonCommercial 3.0 Unported License.
  * To view a copy of this license, visit
