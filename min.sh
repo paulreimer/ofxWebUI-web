@@ -11,5 +11,5 @@ yuicompressor ui-templates.js   >> ui.min.js
 yuicompressor ui-sync.js        >> ui.min.js
 yuicompressor ui-form.js        >> ui.min.js
 yuicompressor ui-init.js        >> ui.min.js
-yuicompressor ui-multitouch.js  >> ui.min.js
+#yuicompressor ui-multitouch.js  >> ui.min.js
 
