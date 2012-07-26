@@ -102,6 +102,10 @@ function set_field_from_value(el, template, value)
 
 function get_appropriate_ws_url(port)
 {
+
+  if (typeof override_ws_url === "string")
+    return override_ws_url;
+
 	var pcol;
 	var u = document.URL;
 
