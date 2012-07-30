@@ -1,6 +1,7 @@
 #!/bin/sh
 
 : > ui-deps.min.js
+yuicompressor lib/DataView.js   >> ui-deps.min.js
 yuicompressor lib/swfobject.js  >> ui-deps.min.js
 yuicompressor lib/web_socket.js >> ui-deps.min.js
 yuicompressor lib/farbtastic.js >> ui-deps.min.js
