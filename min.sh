@@ -32,4 +32,6 @@ cat ui-form.js        >> ui.js
 cat ui-init.js        >> ui.js
 #cat ui-multitouch.js  >> ui.js
 
+yuicompressor ui.js >> ui.min.js
+
 gzip -9 -c ui.min.js > ui.min.gz.js
