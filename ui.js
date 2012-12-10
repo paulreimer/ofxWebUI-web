@@ -366,21 +366,33 @@ var setupWebUI = function() {
       console.log('Error' + exception);  
     }
   };
+
+  var newWebSocket = function(ws_url, protocol) {
+    if ('MozWebSocket' in window)
+      return new MozWebSocket(ws_url, protocol);
+
+    else if ('WebSocket' in window)
+      return new WebSocket(ws_url, protocol);
+
+    else
+      return null;
+  }
   var connect = function() {
     var ws_url = get_appropriate_ws_url();
     try {
-      if (window.MozWebSocket)
-        ws = new MozWebSocket(ws_url, "ofxWebUI");
-      else if (window.WebSocket)
-        ws = new WebSocket(ws_url, "ofxWebUI");
+      ws = newWebSocket(ws_url, "pb-base64");
+      if (ws)
+      {
+        useBinary = (typeof (ws.binaryType) !== 'undefined' && ws.binaryType);
+        if (useBinary)
+        {
+          ws.close();
+          ws = newWebSocket(ws_url, "pb-binary");
+          ws.binaryType = 'arraybuffer';
+        }
+      }
       else
         return;
-
-      if (ws.binaryType)
-      {
-        useBinary = false;
-        ws.binaryType = 'arraybuffer';
-      }
 
       ws.onopen = function() {
         ws_url_el
